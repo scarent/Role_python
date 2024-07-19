@@ -2,26 +2,26 @@ import tkinter as tk
 from tkinter import messagebox, ttk
 from DAO import DAO
 
-class Application(tk.Tk):
+class Juego(tk.Tk):
     def __init__(self):
         super().__init__()
-        self.title("Infinity Creations")
+        self.title("Infinity Creations - Prototipo juego de rol")
         self.geometry("800x600")
         self.dao = DAO()
-        self.create_widgets()
+        self.widgets()
 
-    def create_widgets(self):
-        # Botones en lugar de menú
-        self.user_button = tk.Button(self, text="Usuario", command=self.show_user_options)
+    def widgets(self):
+        
+        self.user_button = tk.Button(self, text="Usuario", command=self.opciones_usuario)
         self.user_button.pack(side=tk.LEFT, padx=5, pady=5)
         
-        self.character_button = tk.Button(self, text="Personaje", command=self.show_character_options)
+        self.character_button = tk.Button(self, text="Personaje", command=self.opciones_personaje)
         self.character_button.pack(side=tk.LEFT, padx=5, pady=5)
         
-        self.gm_button = tk.Button(self, text="GM", command=self.show_gm_options)
+        self.gm_button = tk.Button(self, text="GM", command=self.opciones_gm)
         self.gm_button.pack(side=tk.LEFT, padx=5, pady=5)
 
-    def show_user_options(self):
+    def opciones_usuario(self):
         user_window = tk.Toplevel(self)
         user_window.title("Opciones Usuario")
         user_window.geometry("300x200")
@@ -29,7 +29,7 @@ class Application(tk.Tk):
         tk.Button(user_window, text="Logear", command=self.logear_usuario).pack(pady=10)
         tk.Button(user_window, text="Registrar", command=self.registrar_usuario).pack(pady=10)
 
-    def show_character_options(self):
+    def opciones_personaje(self):
         character_window = tk.Toplevel(self)
         character_window.title("Opciones Personaje")
         character_window.geometry("300x200")
@@ -37,7 +37,7 @@ class Application(tk.Tk):
         tk.Button(character_window, text="Mostrar", command=self.mostrar_personajes).pack(pady=10)
         tk.Button(character_window, text="Crear", command=self.crear_personaje).pack(pady=10)
 
-    def show_gm_options(self):
+    def opciones_gm(self):
         gm_window = tk.Toplevel(self)
         gm_window.title("Opciones GM")
         gm_window.geometry("300x400")
@@ -51,7 +51,7 @@ class Application(tk.Tk):
         tk.Button(gm_window, text="Subir Nivel", command=self.subir_nivel).pack(pady=10)
         tk.Button(gm_window, text="Cambiar Estado", command=self.cambiar_estado).pack(pady=10)
 
-    # Métodos para cada opción
+    
     def logear_usuario(self):
         login_window = tk.Toplevel(self)
         login_window.title("Logear Usuario")
@@ -165,14 +165,14 @@ class Application(tk.Tk):
             tree.column(col, width=100)
         
         for personaje in personajes:
-            # Asume que el resultado contiene los nombres en lugar de IDs
+            
             tree.insert("", "end", values=personaje)
         
         tree.pack(fill=tk.BOTH, expand=True)
-        tree.bind("<Double-1>", self.on_double_click)
+        tree.bind("<Double-1>", self.ventanita)
 
 
-    def on_double_click(self, event):
+    def ventanita(self, event):
         item = event.widget.selection()[0]
         personaje = event.widget.item(item, "values")
         
@@ -238,7 +238,7 @@ class Application(tk.Tk):
         informe = self.dao.informe_gm()
         informe_window = tk.Toplevel(self)
         informe_window.title("Informe GM")
-        informe_window.geometry("700x400")  # Ajusta el tamaño según sea necesario
+        informe_window.geometry("700x400")  
 
         columns = ("ID Personaje", "Nombre Personaje", "Raza", "Nivel", "Estado")
         tree = ttk.Treeview(informe_window, columns=columns, show='headings')
@@ -248,7 +248,7 @@ class Application(tk.Tk):
             tree.column(col, width=140)
         
         for info in informe:
-            # info debe ser una tupla como (id_personaje, nombre_personaje, nombre_raza, nivel, nombre_estado)
+            
             tree.insert("", "end", values=info)
         
         tree.pack(fill=tk.BOTH, expand=True)
@@ -440,5 +440,5 @@ class Application(tk.Tk):
         tk.Button(state_window, text="Cambiar Estado", command=submit).pack(pady=20)
 
 if __name__ == "__main__":
-    app = Application()
+    app = Juego()
     app.mainloop()
