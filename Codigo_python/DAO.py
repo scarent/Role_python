@@ -37,14 +37,37 @@ class DAO:
 
     def mostrar_personajes(self):
         self.conectar()
-        sql = """SELECT Personaje.id_personaje, Personaje.nombre_personaje, Personaje.nombre_jugador, Raza.nombre_raza, Personaje.nivel, Estado.nombre_estado, Personaje.id_usuario
-                FROM Personaje
-                JOIN Raza ON Personaje.id_raza = Raza.id_raza
-                JOIN Estado ON Personaje.id_estado = Estado.id_estado"""
+        sql = """SELECT 
+                    Personaje.id_personaje, 
+                    Personaje.nombre_personaje, 
+                    Personaje.nombre_jugador, 
+                    Raza.nombre_raza, 
+                    Personaje.nivel, 
+                    Estado.nombre_estado,
+                    GROUP_CONCAT(DISTINCT Habilidad.nombre_habilidad) AS habilidades,
+                    GROUP_CONCAT(DISTINCT Poder.nombre_poder) AS poderes
+                FROM 
+                    Personaje
+                JOIN 
+                    Raza ON Personaje.id_raza = Raza.id_raza
+                JOIN 
+                    Estado ON Personaje.id_estado = Estado.id_estado
+                LEFT JOIN 
+                    Personaje_Habilidad ON Personaje.id_personaje = Personaje_Habilidad.id_personaje
+                LEFT JOIN 
+                    Habilidad ON Personaje_Habilidad.id_habilidad = Habilidad.id_habilidad
+                LEFT JOIN 
+                    Personaje_Poder ON Personaje.id_personaje = Personaje_Poder.id_personaje
+                LEFT JOIN 
+                    Poder ON Personaje_Poder.id_poder = Poder.id_poder
+                GROUP BY 
+                    Personaje.id_personaje
+            """
         self.__cursor.execute(sql)
         informacion = self.__cursor.fetchall()
         self.cerrar()
         return informacion
+
 
 
     def informe_gm(self):
@@ -122,3 +145,7 @@ class DAO:
         self.__cursor.execute(sql, values)
         self.__conexion.commit()
         self.cerrar()
+    
+    
+
+

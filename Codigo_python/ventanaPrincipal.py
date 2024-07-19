@@ -157,7 +157,7 @@ class Juego(tk.Tk):
         mostrar_window.title("Personajes")
         mostrar_window.geometry("800x400")
 
-        columns = ("ID", "Nombre", "Jugador", "Raza", "Nivel", "Estado", "Usuario")
+        columns = ("ID", "Nombre", "Jugador", "Raza", "Nivel", "Estado", "Habilidad", "Poder")
         tree = ttk.Treeview(mostrar_window, columns=columns, show='headings')
 
         for col in columns:
@@ -170,6 +170,7 @@ class Juego(tk.Tk):
         
         tree.pack(fill=tk.BOTH, expand=True)
         tree.bind("<Double-1>", self.ventanita)
+
 
 
     def ventanita(self, event):
